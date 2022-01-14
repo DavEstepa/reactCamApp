@@ -6,7 +6,7 @@ import {
   NavbarBrand,
   Nav,
   NavItem } from 'reactstrap';
-import { NavLink } from 'react-router-dom';
+import { NavLink, Link } from 'react-router-dom';
 export default class Header extends Component {
   constructor(props) {
     super(props);
@@ -25,15 +25,24 @@ export default class Header extends Component {
     return (
       <>
         <Navbar dark expand="md">
-            <NavbarBrand href="/">Beyond Safety</NavbarBrand>
+            <Link to='/' className='navbar-brand'>Beyond Safety</Link>
             <NavbarToggler onClick={this.toggle} />
             <Collapse isOpen={this.state.isOpen} navbar>
                 <Nav className="ml-auto" navbar>
                     <NavItem>
-                        <NavLink className="nav-link" to='/camform'>Cam</NavLink>
+                      <NavLink className="nav-link" to='/'>
+                        <span className="fa fa-home fa-lg"></span> Home
+                      </NavLink>
                     </NavItem>
                     <NavItem>
-                        <a className='nav-link' href="https://github.com/DavEstepa">GitHub</a>
+                        <NavLink className="nav-link" to='/camform'>
+                        <span className="fa fa-camera fa-lg"></span> Cam
+                        </NavLink>
+                    </NavItem>
+                    <NavItem>
+                        <a className='nav-link' href="https://github.com/DavEstepa">
+                        <span className="fa fa-github fa-lg"></span> GitHub
+                        </a>
                     </NavItem>
                 </Nav>
             </Collapse>

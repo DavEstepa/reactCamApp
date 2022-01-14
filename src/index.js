@@ -1,16 +1,19 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'font-awesome/css/font-awesome.css';
 import 'bootstrap-social/bootstrap-social.css';
-import React from 'react';
+import React, { Suspense } from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-
+import { FirebaseAppProvider } from 'reactfire';
+import { firebaseConfig } from './firebase/firebaseConfig';
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+  <FirebaseAppProvider firebaseConfig={ firebaseConfig }>
+    <Suspense fallback={<p>Cargando...</p>}>
+      <App />
+    </Suspense>
+  </FirebaseAppProvider>,
   document.getElementById('root')
 );
 
