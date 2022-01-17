@@ -3,7 +3,6 @@ import {
   Collapse,
   Navbar,
   NavbarToggler,
-  NavbarBrand,
   Nav,
   NavItem } from 'reactstrap';
 import { NavLink, Link } from 'react-router-dom';
@@ -27,8 +26,8 @@ export default class Header extends Component {
         <Navbar dark expand="md">
             <Link to='/' className='navbar-brand'>Beyond Safety</Link>
             <NavbarToggler onClick={this.toggle} />
-            <Collapse isOpen={this.state.isOpen} navbar>
-                <Nav className="ml-auto" navbar>
+            <Collapse isOpen={this.state.isOpen} navbar className='justify-content-end'>
+                <Nav className="ml-auto" horizontal={'end'} navbar>
                     <NavItem>
                       <NavLink className="nav-link" to='/'>
                         <span className="fa fa-home fa-lg"></span> Home
@@ -37,6 +36,11 @@ export default class Header extends Component {
                     <NavItem>
                         <NavLink className="nav-link" to='/camform'>
                         <span className="fa fa-camera fa-lg"></span> Cam
+                        </NavLink>
+                    </NavItem>
+                    <NavItem>
+                        <NavLink className="nav-link" to='/images'>
+                        <span className="fa fa-list fa-lg"></span> Images
                         </NavLink>
                     </NavItem>
                     <NavItem>

@@ -3,7 +3,8 @@ import Header from "./HeaderComponent";
 import Home from "./HomeComponent";
 import CamForm from "./CamComponent";
 import { Routes, Route } from 'react-router-dom';
-import { getDatabase, ref, set } from "firebase/database";
+import { getDatabase, ref, set, onValue } from "firebase/database";
+import ListImages from "./ImagesComponent";
 
 class Main extends Component {
     constructor(props){
@@ -11,18 +12,24 @@ class Main extends Component {
         this.state = {
             database: getDatabase(),
             image64: '',
-            count: 0
+            data: {}
         };
-        console.log(this.state.count);
+
         this.sendImageToFirebase = this.sendImageToFirebase.bind(this);
         this.setImage64 = this.setImage64.bind(this);
-        this.setCount = this.setCount.bind(this);
     };
 
-    sendImageToFirebase(nameImage, legend){
-        const createImage = (value1, value2, value3) => ({imageName: value1,legend: value2, image64: value3});
-        set(ref(this.state.database, 'images/image' + this.state.count.toString()), 
-        createImage(nameImage, legend, this.state.image64));
+    componentDidMount(){
+        onValue(ref(this.state.database, 'images/'), (snapshot) => {
+          const dataDB = snapshot.val();
+          this.setState({data: dataDB});
+        });
+    }
+
+    sendImageToFirebase(nameImage, legend, date){
+        const createImage = (value1, value2, value3, value4) => ({imageName: value1,legend: value2, image64: value3, dateISOstr: value4});
+        set(ref(this.state.database, 'images/image' + nameImage + Date.now().toLocaleString()), 
+        createImage(nameImage, legend, this.state.image64, date));
         this.setState({image64: ''});
     };
 
@@ -30,14 +37,15 @@ class Main extends Component {
         this.setState({image64: newImage64});
     }
 
-    setCount(){
-        this.setState({count: this.state.count + 1});
-        console.log(this.state.count);
-    }
     render(){
         const CamFormDerived = () => {
             return(
-                <CamForm setCount={this.setCount} image64={this.state.image64} sendImageToFirebase = {this.sendImageToFirebase} setImage64= {this.setImage64}/>
+                <CamForm image64={this.state.image64} sendImageToFirebase = {this.sendImageToFirebase} setImage64= {this.setImage64}/>
+            );
+        };
+        const ImagesDerived = () => {
+            return(
+                <ListImages data={this.state.data}/>
             );
         };
         return(
@@ -46,6 +54,7 @@ class Main extends Component {
                 <Routes>
                     <Route exact path="/" element={<Home/>} />
                     <Route exact path="/camform" element={<CamFormDerived />} />
+                    <Route exact path="/images" element={<ImagesDerived />}/>
                 </Routes>
             </>
         );

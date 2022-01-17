@@ -1,5 +1,6 @@
-import { Component } from "react";
-import { Button, Row, Form, FormGroup, Label, Input } from 'reactstrap';
+import React, { Component } from "react";
+import { Button, Row, Col, Form, FormGroup, Label, Input,
+    Card, CardTitle, CardText } from 'reactstrap';
 import Webcam from "react-webcam";
 
 export default class CamForm extends Component {
@@ -8,11 +9,9 @@ export default class CamForm extends Component {
         this.handleLogin = this.handleLogin.bind(this);
     }
     handleLogin(event){
-        this.props.sendImageToFirebase(this.imagename.value, this.legend.value);
+        this.props.sendImageToFirebase(this.imagename.value, this.legend.value, new Date().toISOString());
 
         alert("SENT TO FIREBASE!!!");
-        this.setState({image64: ''})
-        this.props.setCount();
         event.preventDefault();
     }
     setRef = webcam => {
@@ -31,42 +30,69 @@ export default class CamForm extends Component {
       };
   
       return (
-        <div>
-            <div className="container-fluid bg-light text-dark p-5">
-                <div className="container bg-light p-5">
+        <div
+        style={{
+        backgroundColor: '#333',
+        borderColor: '#333'
+        }}>
+            <Card
+            body
+            inverse
+            style={{
+            backgroundColor: '#333',
+            borderColor: '#333'
+            }}>
+                <CardTitle tag="h5">
+                    Send info to Firebase
+                </CardTitle>
+                <CardText>
+                    With supporting text below as a natural lead-in to additional content.
+                </CardText>
+                <div className="container">
                     <Row>
-                        <h1 className="display-5">SEND INFO TO FIREBASE</h1>
+                        <Col md={8}>
+                            <Button block onClick={this.capture}>Capture</Button>
+                        </Col>
                     </Row>
                     <Row>
-                        {this.props.image64 == '' ? <Webcam
-                            forceScreenshotSourceSize = {true}
-                            audio={false}
-                            ref={this.setRef}
-                            screenshotFormat="image/jpeg"
-                        /> : <img src={this.props.image64} />}
+                        <Col md={8}>
+                            {this.props.image64 == '' ? <Webcam
+                                forceScreenshotSourceSize = {true}
+                                audio={false}
+                                ref={this.setRef}
+                                screenshotFormat="image/jpeg"
+                            /> : <img src={this.props.image64} />}
+                        </Col>
+                        <Col md={4}>
+                            <Form onSubmit={this.handleLogin} inline>
+                                <FormGroup floating>
+                                    
+                                    <Input type="text" id="imagename" name="imagename"
+                                        innerRef={(input) => this.imagename = input} 
+                                        bsSize="sm"
+                                        className="mb-3"
+                                        placeholder="Image name"
+                                        />
+                                    <Label for="imagename" style={{color: '#333'}} size="sm">Image name</Label>
+                                </FormGroup>
+                                {' '}
+                                <FormGroup floating>
+                                    
+                                    <Input type="textarea" id="legend" name="legend"
+                                        innerRef={(input) => this.legend = input}  
+                                        bsSize="sm"
+                                        className="mb-3"
+                                        placeholder="Image legend"
+                                        />
+                                    <Label for="legend" style={{color: '#333'}} size="sm">Legend</Label>
+                                </FormGroup>
+                                {' '}
+                                <Button block type="submit" value="submit">Send to Firebase</Button>
+                            </Form>
+                        </Col>
                     </Row>
-                    <Row>
-                        <hr className="my-2" />
-                        <p className="lead">
-                        <Button color="primary" onClick={this.capture}>Capture</Button>
-                        </p>
-                    </Row>
-
                 </div>
-                <Form onSubmit={this.handleLogin}>
-                    <FormGroup>
-                        <Label htmlFor="imagename">Image name</Label>
-                        <Input type="text" id="imagename" name="imagename"
-                            innerRef={(input) => this.imagename = input} />
-                    </FormGroup>
-                    <FormGroup>
-                        <Label htmlFor="legend">Legend</Label>
-                        <Input type="text" id="legend" name="legend"
-                            innerRef={(input) => this.legend = input}  />
-                    </FormGroup>
-                    <Button type="submit" value="submit" color="primary">Send</Button>
-                </Form>
-            </div>
+            </Card>
         </div>
       );
     }
