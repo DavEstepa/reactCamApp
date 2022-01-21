@@ -8,6 +8,8 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { FirebaseAppProvider } from 'reactfire';
 import { firebaseConfig } from './firebase/firebaseConfig';
+import 'react-image-gallery/styles/css/image-gallery.css';
+
 ReactDOM.render(
   <FirebaseAppProvider firebaseConfig={ firebaseConfig }>
     <Suspense fallback={<p>Cargando...</p>}>

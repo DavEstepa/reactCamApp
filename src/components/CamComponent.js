@@ -23,12 +23,6 @@ export default class CamForm extends Component {
     };
   
     render() {
-      const videoConstraints = {
-        width: 1280,
-        height: 720,
-        facingMode: "user"
-      };
-  
       return (
         <div
         style={{
