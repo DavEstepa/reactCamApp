@@ -6,6 +6,8 @@ import {
   Nav,
   NavItem } from 'reactstrap';
 import { NavLink, Link } from 'react-router-dom';
+import Profile from './ProfileComponent';
+
 export default class Header extends Component {
   constructor(props) {
     super(props);
@@ -27,26 +29,19 @@ export default class Header extends Component {
             <Link to='/' className='navbar-brand'>Beyond Safety</Link>
             <NavbarToggler onClick={this.toggle} />
             <Collapse isOpen={this.state.isOpen} navbar className='justify-content-end'>
-                <Nav className="ml-auto" horizontal={'end'} navbar>
+                <Nav className="ml-auto" navbar>
                     <NavItem>
                       <NavLink className="nav-link" to='/'>
                         <span className="fa fa-home fa-lg"></span> Home
                       </NavLink>
                     </NavItem>
                     <NavItem>
-                        <NavLink className="nav-link" to='/camform'>
-                        <span className="fa fa-camera fa-lg"></span> Cam
-                        </NavLink>
-                    </NavItem>
-                    <NavItem>
-                        <NavLink className="nav-link" to='/images'>
-                        <span className="fa fa-list fa-lg"></span> Images
-                        </NavLink>
-                    </NavItem>
-                    <NavItem>
                         <a className='nav-link' href="https://github.com/DavEstepa">
                         <span className="fa fa-github fa-lg"></span> GitHub
                         </a>
+                    </NavItem>
+                    <NavItem>
+                    <Profile user={this.props.user} signIn={this.props.signIn} exit={this.props.exit}/>
                     </NavItem>
                 </Nav>
             </Collapse>

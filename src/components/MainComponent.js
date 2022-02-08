@@ -4,6 +4,7 @@ import Home from "./HomeComponent";
 import CamForm from "./CamComponent";
 import { Routes, Route } from 'react-router-dom';
 import { getDatabase, ref, set, onValue } from "firebase/database";
+import { getAuth, signInWithEmailAndPassword, signOut  } from "firebase/auth";
 import ListImages from "./ImagesComponent";
 
 class Main extends Component {
@@ -12,12 +13,42 @@ class Main extends Component {
         this.state = {
             database: getDatabase(),
             image64: '',
-            data: {}
+            data: {},
+            user: ''
         };
 
         this.sendImageToFirebase = this.sendImageToFirebase.bind(this);
         this.setImage64 = this.setImage64.bind(this);
+        this.signIn = this.signIn.bind(this);
+        this.exit = this.exit.bind(this);
     };
+    
+    exit(){
+        const auth = getAuth();
+        signOut(auth).then(() => {
+          this.setState({user: ''});
+          console.log('salido');
+        }).catch((error) => {
+          // An error happened.
+        });
+    }
+
+    signIn(email, password){
+        console.log('dentro signIn');
+        signInWithEmailAndPassword(getAuth(), email, password)
+        .then((userCredential) => {
+          // Signed in
+          const user = userCredential.user;
+          this.setState({user: user.email});
+          console.log(user.email);
+          // ...
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          alert(errorMessage);
+        });
+    }
 
     componentDidMount(){
         onValue(ref(this.state.database, 'images/'), (snapshot) => {
@@ -50,7 +81,7 @@ class Main extends Component {
         };
         return(
             <>
-                <Header />
+                <Header user={this.state.user} signIn={this.signIn} exit={this.exit}/>
                 <Routes>
                     <Route exact path="/" element={<Home/>} />
                     <Route exact path="/camform" element={<CamFormDerived />} />
